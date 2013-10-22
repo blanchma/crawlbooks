@@ -1,5 +1,4 @@
 require "rubygems"
-require "bundler"
 require 'rake/testtask'
 require_relative 'lib/crawlbooks'
 

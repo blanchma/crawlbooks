@@ -1,13 +1,14 @@
-require "bundler"
+#require "bundler"
 require "thread"
+require "httparty"
 require "benchmark"
 
-Bundler.require
+#Bundler.require
 
 class Crawlbooks
   CATEGORY_REGEX=/(http:\/\/bibliophiliaparana.wordpress.com\/category\/\S*)"/
   POST_REGEX=/(http:\/\/bibliophiliaparana.wordpress.com\/\d+\/\d+\/\d+\/[^#\/]*)/#/(http:\/\/bibliophiliaparana.wordpress.com\/\d+\/\d+\/\d+\/\S*\/?)#?"/
-  DROPBOX_REGEX=/http:\/\/dl.dropbox.com\/\S*\.pdf\/?"/
+  DROPBOX_REGEX=/(http:\/\/dl.dropbox.com\/\S*\.pdf)\/?"/
   #http://bibliophiliaparana.wordpress.com/
 
   def run
@@ -23,7 +24,6 @@ class Crawlbooks
       puts "#{category_sections.size} category links collected"
       category_sections.first(2).each do |category_link|
         @crawlers << Thread.new { crawl_category(category_link) }
-        crawl_category(category_link)
       end
 
       @crawlers.map(&:join)
@@ -67,6 +67,7 @@ class Crawlbooks
   end
 
   def scan_dropbox_links(body)
+    debugger
     body.scan(DROPBOX_REGEX).flatten
   end
 
