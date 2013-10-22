@@ -16,8 +16,13 @@ class TestCrawlbooks < MiniTest::Unit::TestCase
     assert Crawlbooks::DROPBOX_REGEX =~ "<a href=\"http://dl.dropbox.com/u/66288738/V/Vernant-Jean-El-Universo-Los-Dioses-Los-Hombres.pdf\">Ble</a>"
   end
 
-  def test_scan_posts
+  def test_scan_posts_without_hash
     assert Crawlbooks::POST_REGEX =~ "<a href=\"http://bibliophiliaparana.wordpress.com/2012/05/06/adorno-theodor-w-educacion-para-la-emancipacion-2/\">"
+  end
+
+  def test_scan_posts_with_hash
+    link = Crawlbooks::POST_REGEX.match("<a href=\"http://bibliophiliaparana.wordpress.com/2012/05/06/adorno-theodor-w-educacion-para-la-emancipacion-2/#respond\">")[0]
+    assert link == "http://bibliophiliaparana.wordpress.com/2012/05/06/adorno-theodor-w-educacion-para-la-emancipacion-2"
   end
 
   def test_hard_scan_dropbox

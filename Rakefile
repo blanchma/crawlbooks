@@ -1,8 +1,11 @@
 require "rubygems"
-require "bundler"
-
-
 require 'rake/testtask'
+require_relative 'lib/crawlbooks'
+
+desc "Crawl all links"
+task :crawl do
+  Crawlbooks.new.run
+end
 
 Rake::TestTask.new do |t|
   #t.libs.push "lib"
