@@ -7,8 +7,12 @@ Bundler.require
 class Crawlbooks
   CATEGORY_REGEX=/(http:\/\/bibliophiliaparana.wordpress.com\/category\/\S*)"/
   POST_REGEX=/(http:\/\/bibliophiliaparana.wordpress.com\/\d+\/\d+\/\d+\/[^#\/]*)/#/(http:\/\/bibliophiliaparana.wordpress.com\/\d+\/\d+\/\d+\/\S*\/?)#?"/
-  DROPBOX_REGEX=/http:\/\/dl.dropbox.com\/\S*\.pdf\/?"/
+  DROPBOX_REGEX=/(http:\/\/dl.dropbox.com\/\S*\.pdf\/?)"/
   #http://bibliophiliaparana.wordpress.com/
+
+  def initialize(limit=nil)
+    @limit = limit
+  end
 
   def run
     Benchmark.measure do
@@ -22,6 +26,7 @@ class Crawlbooks
       puts "#{category_sections.size} category links collected"
       category_sections.each do |category_link|
         crawl_category(category_link)
+        return if @links.size > @limit if @limit
       end
 
       @links.uniq!

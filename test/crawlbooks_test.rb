@@ -1,7 +1,6 @@
 require_relative 'test_helper'
 require 'crawlbooks'
 
-
 class TestCrawlbooks < MiniTest::Unit::TestCase
 
   def test_scan_categories
@@ -30,10 +29,17 @@ class TestCrawlbooks < MiniTest::Unit::TestCase
     refute Crawlbooks::DROPBOX_REGEX.match(html_fragment)[0]  == html_fragment
   end
 
+  def test_only_one_link_per_tag
+    html_fragment = "http://dl.dropbox.com/u/66288738/O/Onfray-Michel-Teoria-Del-Cuerpo-Enamorado-Por-Una-Erotica-OCR-NoSCrbd.pdf\">http://dl.dropbox.com/u/66288738/O/Onfray-Michel-Teoria-Del-Cuerpo-Enamorado-Por-Una-Erotica-OCR-NoSCrbd.pdf"
+    links = html_fragment.scan(Crawlbooks::DROPBOX_REGEX).flatten
+    puts links
+    assert links.size == 1
+  end
+
   def test_contain_many_dropbox_link
-    crawl = Crawlbooks.new.run
-    assert crawl.include?('http://dl.dropbox.com/u/66288738/V/Vernant-Jean-El-Universo-Los-Dioses-Los-Hombres.pdf')
-    assert crawl.size > 20
+    #crawl = Crawlbooks.new(2).run
+    #assert crawl.include?('http://dl.dropbox.com/u/66288738/V/Vernant-Jean-El-Universo-Los-Dioses-Los-Hombres.pdf')
+    #assert crawl.size > 10
   end
 
 end
